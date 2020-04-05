@@ -61,13 +61,18 @@ class UserTest < ActiveSupport::TestCase
     user1 = User.create(name: "foo", email: "foo@bar.com")
     assert user1.valid?
 
-    # Attempting to create another user with the same email should fail
-    user2 = User.new(name: "foo", email: "foo@bar.com")
+    # Attempting to create another user with the same email should fail (case insensitive)
+    user2 = User.new(name: "foo", email: "FoO@bAR.COM")
     assert user1.valid?
     assert_not user2.valid?
 
     # Destroying the original user allows the new user to pass validation
     user1.destroy
     assert user2.valid?
+  end
+
+  test "emails are downcased on save" do
+    user = User.create(name: "foo", email: "FoO@bAR.COM")
+    assert_equal(user.email, "foo@bar.com")
   end
 end
