@@ -24,3 +24,8 @@
 
 # Ignore Spring files.
 /spring/*.pid
+
+# ignore files created by RubyMine
+.generators
+.idea/*
+.rakeTasks
