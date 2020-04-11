@@ -18,5 +18,6 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/new'
     assert_select 'div#error_explanation', 1
     assert_select 'div.field_with_errors', 8
+    # TODO: still not validating that the url is /signup before and after
   end
 end
