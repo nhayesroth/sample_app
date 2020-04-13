@@ -20,10 +20,14 @@ class SessionsController < ApplicationController
     authenticated = user.authenticate(params[:session][:password])
     if authenticated
       flash.now[:success] = 'Successfully logged in!'
+      login(user)
+      redirect_to(user)
+      return
     else
       flash.now[:danger] = 'Password is incorrect!'
+      render 'new'
+      return
     end
-    render 'new'
   end
 
   def destroy
