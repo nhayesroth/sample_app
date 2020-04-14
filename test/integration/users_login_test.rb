@@ -6,7 +6,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     @user = users(:michael)
   end
 
-  test "test empty params" do
+  test "empty params" do
     params1 = {session: {email: "", password: ""}}
     params2 = {session: {email: "", password: "foobar"}}
     params3 = {session: {email: @user.email, password: ""}}
@@ -24,7 +24,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "test email not associated with account" do
+  test "email not associated with account" do
     params = {session: {email: "unused+email@gmail.com", password: "foobar"}}
 
     get login_path
@@ -38,7 +38,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert flash.empty?
   end
 
-  test "test invalid password" do
+  test "invalid password" do
     params = {session: {email: @user.email, password: "wrong password"}}
 
     get login_path
@@ -52,7 +52,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert flash.empty?
   end
 
-  test "test success" do
+  test "successful login" do
     params = {session: {email: @user.email, password: 'password'}}
 
     get login_path
@@ -66,5 +66,23 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", login_path, count: 0
     assert_select "a[href=?]", logout_path
     assert_select "a[href=?]", user_path(@user)
+  end
+
+  test "successful logout" do
+    # First, login as the test user.
+    params = {session: {email: @user.email, password: 'password'}}
+    post(
+      login_path,
+      params: params);
+    follow_redirect!
+    
+    # Logout and verify.
+    delete(logout_path)
+    assert_redirected_to root_path
+    follow_redirect!
+
+    assert !is_logged_in?
+    assert_select "a[href=?]", login_path, count: 1
+    assert_select "a[href=?]", logout_path, count: 0
   end
 end

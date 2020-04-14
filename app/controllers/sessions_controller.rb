@@ -32,6 +32,6 @@ class SessionsController < ApplicationController
 
   def destroy
     logout
-    render 'new'
+    redirect_to root_url
   end
 end
