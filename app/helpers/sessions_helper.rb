@@ -23,7 +23,7 @@ module SessionsHelper
 
   # Deletes the cookies necessary to 'forget' a user.
   def forget_via_cookies(user)
-    user.forget_remember_digest()
+    user.forget_remember_digest() if logged_in?
     cookies.delete(:user_id)
     cookies.delete(:remember_token)
   end
