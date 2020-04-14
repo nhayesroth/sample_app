@@ -3,6 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
 
   def setup
+    @user = users(:michael)
   end
 
   test "should be valid" do
@@ -84,5 +85,13 @@ class UserTest < ActiveSupport::TestCase
   test "emails are downcased on save" do
     user = User.create(name: "foo", email: "FoO@bAR.COM", password: "password", password_confirmation: "password")
     assert_equal(user.email, "foo@bar.com")
+  end
+
+  test "nil digest should not throw" do
+    remember_token = @user.update_remember_digest
+    assert @user.authenticated?(remember_token)
+    
+    @user.forget_remember_digest
+    assert_not @user.authenticated?(remember_token)
   end
 end

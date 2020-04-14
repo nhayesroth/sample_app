@@ -53,6 +53,8 @@ class User < ApplicationRecord
 
   # Returns whether the specified remember_token matches the stored digest
   def authenticated?(signed_remember_token)
-    return BCrypt::Password.new(remember_digest).is_password?(signed_remember_token)
+    return remember_digest.nil? ? false
+                                : BCrypt::Password.new(remember_digest)
+                                   .is_password?(signed_remember_token)
   end
 end
