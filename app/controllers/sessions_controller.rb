@@ -19,9 +19,9 @@ class SessionsController < ApplicationController
     # Authenticate the user and return depending on the result.
     authenticated = user.authenticate(params[:session][:password])
     if authenticated
-      flash.now[:success] = 'Successfully logged in!'
-      login(user)
+      helpers.login(user)
       redirect_to(user)
+      flash[:success] = 'Successfully logged in!'
       return
     else
       flash.now[:danger] = 'Password is incorrect!'
@@ -33,5 +33,6 @@ class SessionsController < ApplicationController
   def destroy
     logout(helpers.current_user)
     redirect_to root_url
+    flash[:success] = "Successfully logged out!"
   end
 end
