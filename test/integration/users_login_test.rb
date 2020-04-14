@@ -68,6 +68,33 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", user_path(@user)
   end
 
+  test "successful login with remembering" do
+    params = {session: {email: @user.email, password: 'password', remember_me: '1'}}
+
+    get login_path
+    post(
+      login_path,
+      params: params);
+
+    assert is_logged_in?
+    assert_not_empty cookies[:user_id]
+    assert_not_empty cookies[:remember_token]
+  end
+
+  test "successful login without remembering" do
+    params = {session: {email: @user.email, password: 'password', remember_me: '0'}}
+
+    get login_path
+    assert_template 'sessions/new' 
+    post(
+      login_path,
+      params: params);
+
+    assert is_logged_in?
+    assert_nil cookies[:user_id]
+    assert_nil cookies[:remember_token]
+  end
+
   test "successful logout" do
     # First, login as the test user.
     params = {session: {email: @user.email, password: 'password'}}
@@ -84,8 +111,6 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert !is_logged_in?
     assert_select "a[href=?]", login_path, count: 1
     assert_select "a[href=?]", logout_path, count: 0
-
-
     
     # Logout and verify again (e.g. if you had 2 browser windows open).
     delete(logout_path)

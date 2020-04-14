@@ -1,9 +1,9 @@
 module SessionsHelper
 
   # Logs the specified user in and updates the session's user.id and cookies.
-  def login(user)
+  def login(user, remember_me='1')
     session[:user_id] = user.id
-    remember_via_cookies(user)
+    remember_via_cookies(user) if remember_me == '1'
     return @user = current_user()
   end
 
