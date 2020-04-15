@@ -15,4 +15,21 @@ class ActiveSupport::TestCase
   def is_logged_in?
     return !session[:user_id].nil?
   end
+
+  def login(
+      options={
+        email: users(:michael).email,
+        password: 'password'
+      })
+    get login_path
+    post(
+      login_path,
+      params: {
+        session: {
+          email: options[:email],
+          password: options[:password]
+        }
+      });
+    follow_redirect!
+  end
 end
