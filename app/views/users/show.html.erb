@@ -13,3 +13,4 @@
 <p><%= "Email: #{@user.email}" %></p>
 <p><%= "Updated: #{@user.updated_at}" -%></p>
 <p><%= "Time.now: #{Time.now}" %></p>
+<%= link_to "Update account", edit_user_path(current_user) %>
