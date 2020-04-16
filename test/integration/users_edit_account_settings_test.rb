@@ -30,6 +30,7 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
     updated_user = User.find(@user.id)
     assert_equal updated_user.name, "New name"
     assert_equal updated_user.email, "new_email@foobar.com"
+    assert_select "div.alert-success", UsersController::UPDATE_SUCCESS
     # TODO: change passwords?
   end
 
@@ -57,6 +58,6 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
     unchanged_user = User.find(@user.id)
     assert_equal unchanged_user.name, @user.name
     assert_equal unchanged_user.email, @user.email
-    assert !flash.empty?
+    assert_select "div.alert-danger", UsersController::UPDATE_FAILURE
   end
 end

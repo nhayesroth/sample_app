@@ -38,6 +38,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
     follow_redirect!
     assert_template 'users/show'
+    assert_select "div.alert-success", UsersController::SIGNUP_SUCCESS
     assert is_logged_in?
     assert_select "a[href=?]", logout_path
   end

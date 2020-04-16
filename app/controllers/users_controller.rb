@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
 
+  SIGNUP_SUCCESS = "Successfully signed up! Welcome!"
+  UPDATE_SUCCESS = "Account settings updated!"
+  UPDATE_FAILURE = "Failed to update account settings!"
+
   # Action that shows a user profile
   def show
     @user = User.find(params[:id])
@@ -16,7 +20,7 @@ class UsersController < ApplicationController
     if (@user.save())
       login(@user)
       redirect_to @user
-      flash[:success] = "Successfully signed up! Welcome!"
+      flash[:success] = SIGNUP_SUCCESS
     else
       render 'new'
     end
@@ -31,10 +35,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if (@user.update_attributes(user_params))
       redirect_to @user
-      flash[:success] = "Account settings updated!"
+      flash[:success] = UPDATE_SUCCESS
     else
       redirect_to edit_user_path(@user)
-      flash[:danger] = "Failed to update account settings!"
+      flash[:danger] = UPDATE_FAILURE
     end
   end
 
