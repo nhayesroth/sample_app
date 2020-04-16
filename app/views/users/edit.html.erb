@@ -2,5 +2,6 @@
 <%= render partial: 'form.html.erb',
           locals: {
             form_title: 'Edit Account',
+            form_url: "/users/#{@user.id}/edit",
             form_submit_text: 'Save account changes',
             include_gravatar_edit: true } %>

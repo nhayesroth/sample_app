@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   # Users
   get '/signup',  to: 'users#new'
   post '/signup',  to: 'users#create'
+  get '/users/:id/edit',  to: 'users#edit'
+  patch '/users/:id/edit',  to: 'users#update'
   resources       :users
 
   # Sessions

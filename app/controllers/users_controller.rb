@@ -2,7 +2,6 @@ class UsersController < ApplicationController
 
   SIGNUP_SUCCESS = "Successfully signed up! Welcome!"
   UPDATE_SUCCESS = "Account settings updated!"
-  UPDATE_FAILURE = "Failed to update account settings!"
 
   # Action that shows a user profile
   def show
@@ -22,7 +21,7 @@ class UsersController < ApplicationController
       redirect_to @user
       flash[:success] = SIGNUP_SUCCESS
     else
-      render 'new'
+      render 'new', status: 400
     end
   end
 
@@ -37,8 +36,7 @@ class UsersController < ApplicationController
       redirect_to @user
       flash[:success] = UPDATE_SUCCESS
     else
-      redirect_to edit_user_path(@user)
-      flash[:danger] = UPDATE_FAILURE
+      render 'edit', status: 400
     end
   end
 

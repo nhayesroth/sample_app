@@ -22,6 +22,8 @@ class User < ApplicationRecord
     {
       presence: true,
       length: { minimum: 5 },
+      # Allows accounts to be edited without re-specifying the password
+      allow_nil: true,
     })
   has_secure_password
 

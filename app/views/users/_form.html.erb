@@ -1,7 +1,7 @@
 <h1><%= form_title %></h1>
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_for(@user) do |form| %>
+    <%= form_for(@user, url: local_assigns[:form_url] ) do |form| %>
       <%= render 'shared/error_messages' %>
       <%= form.label :name %>
       <%= form.text_field :name, class: 'form-control'%>
