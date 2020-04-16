@@ -32,3 +32,6 @@
 
 # Ignore README previews
 README.html
+
+# Ignore macOS metadata
+.DS_Store
