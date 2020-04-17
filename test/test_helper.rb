@@ -31,5 +31,6 @@ class ActiveSupport::TestCase
         }
       });
     follow_redirect!
+    assert is_logged_in?
   end
 end

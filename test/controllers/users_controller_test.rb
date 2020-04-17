@@ -18,7 +18,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_select "title", "Login | #{ApplicationHelper::BASE_TITLE}"
   end
 
-  test "should get account settings" do
+  test "should get account settings when logged in" do
+    login
     get edit_user_path(@user)
     assert_response :success
     assert_select "title", "Account Settings | #{ApplicationHelper::BASE_TITLE}"

@@ -4,7 +4,7 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
   
   def setup
     @user1 = users(:user1)
-    @user2 = users(:user1)
+    @user2 = users(:user2)
   end
 
   test "update success same password" do
@@ -121,7 +121,6 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
     get edit_user_path(@user1)
 
     assert_response :redirect
-    assert_response 401 # (unauthorized)
     assert_redirected_to login_path
 
     patch(
@@ -136,7 +135,6 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
       })
 
     assert_response :redirect
-    assert_response 401 # (unauthorized)
     assert_redirected_to login_path
 
     unchanged_user = User.find(@user1.id)
@@ -150,7 +148,6 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
     get edit_user_path(@user1)
 
     assert_response :redirect
-    assert_response 401 # (unauthorized)
     assert_redirected_to root_path
 
     patch(
@@ -165,7 +162,6 @@ class UsersEditAccountSettingsTest < ActionDispatch::IntegrationTest
       })
 
     assert_response :redirect
-    assert_response 401 # (unauthorized)
     assert_redirected_to root_path
 
     unchanged_user = User.find(@user1.id)

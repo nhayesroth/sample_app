@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersLoginTest < ActionDispatch::IntegrationTest
 
   def setup
-    @user = users(:michael)
+    @user = users(:user1)
   end
 
   test "empty params" do
@@ -53,7 +53,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test "successful login" do
-    params = {session: {email: @user.email, password: 'password'}}
+    params = {session: {email: @user.email, password: 'password1'}}
 
     get login_path
     assert_template 'sessions/new' 
@@ -69,7 +69,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test "successful login with remembering" do
-    params = {session: {email: @user.email, password: 'password', remember_me: '1'}}
+    params = {session: {email: @user.email, password: 'password1', remember_me: '1'}}
 
     get login_path
     post(
@@ -82,7 +82,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test "successful login without remembering" do
-    params = {session: {email: @user.email, password: 'password', remember_me: '0'}}
+    params = {session: {email: @user.email, password: 'password1', remember_me: '0'}}
 
     get login_path
     assert_template 'sessions/new' 
@@ -97,7 +97,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   test "successful logout" do
     # First, login as the test user.
-    params = {session: {email: @user.email, password: 'password'}}
+    params = {session: {email: @user.email, password: 'password1'}}
     post(
       login_path,
       params: params);
