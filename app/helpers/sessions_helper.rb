@@ -50,4 +50,20 @@ module SessionsHelper
       end
     end
   end
+
+  def record_original_request_url
+    session[:original_request_url] = request.original_url
+  end
+
+  def redirect_after_login
+    if (!logged_in?)
+      raise
+    end
+    if !session[:original_request_url].nil?
+      redirect_to(session[:original_request_url], status: 303)
+      session.delete(:initial_request)
+    else
+      redirect_to(current_user)
+    end
+  end
 end

@@ -30,7 +30,11 @@ class ActiveSupport::TestCase
           password: options[:password]
         }
       });
-    follow_redirect!
     assert is_logged_in?
+  end
+
+  def logout
+    delete logout_path
+    assert !is_logged_in?
   end
 end

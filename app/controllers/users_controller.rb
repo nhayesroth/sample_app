@@ -4,6 +4,7 @@ class UsersController < ApplicationController
 
   SIGNUP_SUCCESS = "Successfully signed up! Welcome!"
   UPDATE_SUCCESS = "Account settings updated!"
+  NOT_AUTHORIZED = "You are not authorized to view other users' pages."
 
   # Action that shows a user profile
   def show
@@ -45,13 +46,15 @@ class UsersController < ApplicationController
   private def check_logged_in
     if !helpers.logged_in?
       flash[:danger] = "Please log in."
-      redirect_to login_url
+      helpers.record_original_request_url
+      redirect_to(login_url)
     end
   end
 
   private def check_authorized
+    # Check if the logged in user (via cookies/session) matches the requested url.
     if (helpers.current_user.id.to_s != params[:id])
-      redirect_to root_path
+      redirect_to(root_path)
       flash[:danger] = 'You are not authorized to view other users\' pages.'
     end
   end
