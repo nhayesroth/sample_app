@@ -3,7 +3,7 @@ require 'test_helper'
 class SessionsHelperTest < ActionView::TestCase
   
   def setup
-    @user = users(:michael)
+    @user = users(:user1)
   end
 
   test "current user returns nil when not logged in" do

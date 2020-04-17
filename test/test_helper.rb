@@ -18,8 +18,8 @@ class ActiveSupport::TestCase
 
   def login(
       options={
-        email: users(:michael).email,
-        password: 'password'
+        email: users(:user1).email,
+        password: 'password1'
       })
     get login_path
     post(
