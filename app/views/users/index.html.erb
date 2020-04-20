@@ -8,6 +8,6 @@
         <li><%= link_to("#{user.name} #{user.email}", user_path(user)) %></li>
       <% end %>
     </ul>
-    </p>
+    <%= will_paginate %>
   </body>
 </html>

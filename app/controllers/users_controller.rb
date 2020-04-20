@@ -1,14 +1,23 @@
 class UsersController < ApplicationController
   before_action :check_logged_in, only: [:index, :edit, :update]
   before_action :check_authorized, only: [:edit, :update]
-
+  DEFAULT_PAGE_SIZE = 25
+  MAX_PAGE_SIZE = 100
   SIGNUP_SUCCESS = "Successfully signed up! Welcome!"
   UPDATE_SUCCESS = "Account settings updated!"
   NOT_AUTHORIZED = "You are not authorized to view other users' pages."
+  BAD_PAGE_SIZE_WARNING = "Page size must be between [1, #{MAX_PAGE_SIZE}]."
 
   # Action that lists all users
   def index
-    @users = User.all
+    params[:page_size] ||= DEFAULT_PAGE_SIZE
+    if (params[:page_size].to_i < 0 ||
+      params[:page_size].to_i > MAX_PAGE_SIZE)
+      params[:page_size] = DEFAULT_PAGE_SIZE
+      flash[:danger] = BAD_PAGE_SIZE_WARNING
+      redirect_to users_path(params.permit(:page, :page_size)) and return
+    end
+    @users = User.paginate(page: params[:page], per_page: params[:page_size])
   end
 
   # Action that shows a user profile
