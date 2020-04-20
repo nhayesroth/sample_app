@@ -1,10 +1,15 @@
 class UsersController < ApplicationController
-  before_action :check_logged_in, only: [:edit, :update]
+  before_action :check_logged_in, only: [:index, :edit, :update]
   before_action :check_authorized, only: [:edit, :update]
 
   SIGNUP_SUCCESS = "Successfully signed up! Welcome!"
   UPDATE_SUCCESS = "Account settings updated!"
   NOT_AUTHORIZED = "You are not authorized to view other users' pages."
+
+  # Action that lists all users
+  def index
+    @users = User.all
+  end
 
   # Action that shows a user profile
   def show

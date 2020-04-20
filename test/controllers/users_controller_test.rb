@@ -3,26 +3,58 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @user = users(:user1)
+    @user1 = users(:user1)
+    @user2 = users(:user2)
   end
 
-  test "should get new user sign up" do
+  ################ Basic route tests ################
+
+  test "get new user sign up" do
     get signup_path
     assert_response :success
-    assert_select "title", "Sign up | #{ApplicationHelper::BASE_TITLE}"
+    assert_select("title", full_title("Sign up"))
   end
 
-  test "should get login" do
+  test "get login" do
     get login_path
     assert_response :success
-    assert_select "title", "Login | #{ApplicationHelper::BASE_TITLE}"
+    assert_select("title", full_title("Login"))
   end
 
-  test "should get account settings when logged in" do
+  test "get user profile" do
+    get(user_path(@user1))
+    assert_response(:success)
+    assert_select("title", full_title(@user1.name))
+  end
+
+  ################ Basic (authenticated) route tests ################
+
+  test "get account settings when logged in" do
     login
-    get edit_user_path(@user)
+    get edit_user_path(@user1)
     assert_response :success
-    assert_select "title", "Account Settings | #{ApplicationHelper::BASE_TITLE}"
+    assert_select("title", full_title("Account Settings"))
+  end
+
+  test "get index when logged in" do
+    login
+    get(users_path)
+    assert_response(:success)
+    assert_select("title", full_title("Users"))
+  end
+
+  ################ Basic (unauthenticated) route tests ################
+
+  test "get account settings redirects to login when logged out" do
+    get edit_user_path(@user1)
+    assert_response(:redirect)
+    assert_redirected_to(login_path)
+  end
+
+  test "get index redirects to login when logged out" do
+    get(users_path)
+    assert_response(:redirect)
+    assert_redirected_to login_path
   end
 
 end

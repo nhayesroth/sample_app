@@ -1,4 +1,5 @@
 module SessionsHelper
+  LOGIN_SUCCESS = 'Successfully logged in!'
 
   # Logs the specified user in and updates the session's user.id and cookies.
   def login(user, remember_me='1')
@@ -55,15 +56,20 @@ module SessionsHelper
     session[:original_request_url] = request.original_url
   end
 
+  # Redirects after a successful login
   def redirect_after_login
     if (!logged_in?)
       raise
     end
+    # If the original request caused a redirect to login, redirect to that initial location.
     if !session[:original_request_url].nil?
       redirect_to(session[:original_request_url], status: 303)
       session.delete(:initial_request)
     else
+      # Otherwise, default to the current user's profile page.
       redirect_to(current_user)
     end
+    # Always flash success.
+    flash[:success] = LOGIN_SUCCESS
   end
 end

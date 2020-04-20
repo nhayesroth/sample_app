@@ -1,0 +1,13 @@
+<% provide(:title, 'Users') %>
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Users</h1>
+    <ul class="users">
+      <% @users.each do |user| %>
+        <li><%= link_to("#{user.name} #{user.email}", user_path(user)) %></li>
+      <% end %>
+    </ul>
+    </p>
+  </body>
+</html>

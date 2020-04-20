@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-  LOGIN_SUCCESS = 'Successfully logged in!'
   def new
   end
 
@@ -22,7 +21,6 @@ class SessionsController < ApplicationController
     if authenticated
       login(user, params[:session][:remember_me])
       redirect_after_login
-      flash[:success] = LOGIN_SUCCESS
       return
     else
       flash.now[:danger] = 'Password is incorrect!'
