@@ -4,10 +4,9 @@
   <body>
     <h1>Users</h1>
     <ul class="users">
-      <% @users.each do |user| %>
-        <li><%= link_to("#{user.name} #{user.email}", user_path(user)) %></li>
-      <% end %>
+      <%= will_paginate %>
+      <%= render(@users) %>
+      <%= will_paginate %>
     </ul>
-    <%= will_paginate %>
   </body>
 </html>

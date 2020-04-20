@@ -1,0 +1,5 @@
+<!-- Partial for showing a user in the index -->
+<li>
+  <%= gravatar_for user, size: 50 %>
+  <%= link_to("#{user.name} #{user.email}", user_path(user)) %>
+</li>
