@@ -5,6 +5,8 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
   def setup
     @user1 = users(:user1)
     @user2 = users(:user2)
+    @admin = users(:admin)
+    @users = [@user1, @user2, @admin].sort_by(&:id)
   end
 
   ################ Basic route tests ################
@@ -13,30 +15,38 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     login
     get(users_path)
 
+    # Should have entries for each user (default page size > 3) and no next/prev link.
     assert_select("a[href=?]", user_path(@user1))
     assert_select("a[href=?]", user_path(@user2))
+    assert_select("a[href=?]", user_path(@admin))
+    assert_select("a[href=?]", users_path(page: 0), count: 0)
+    assert_select("a[href=?]", users_path(page: 2), count: 0)
   end
 
-  test "get first page" do
+  test "get each page in order with params" do
     login
-    get(users_path(page_size: 1))
 
-    # Should have 1 user, a link to the next page, and no link to the prev page.
-    assert_select(".users a[href=?]", user_path(@user1))
-    assert_select(".users a[href=?]", user_path(@user2), count: 0)
-    assert_select("a[href=?]", users_path(page: 2, page_size: 1))
-    assert_select("a[href=?]", users_path(page: 0, page_size: 1), count: 0)
-  end
+    # Page 1
+    # Should have the 1st user, a link to the next page, and no link to the prev page.
+    get(users_path(page: 1, page_size: 1))
+    assert_select(".user-index-entry a[href=?]", user_path(@users[0]))
+    assert_select(".next_page a[href=?]", users_path(page: 2, page_size: 1))
+    assert_select(".previous_page a[href=?]", '#')
 
-  test "get final page" do
-    login
+    # Page 2
+    # Should have the 2nd user, a link to the next page, and a link to the prev page.
     get(users_path(page: 2, page_size: 1))
+    assert_select(".user-index-entry a[href=?]", user_path(@users[1]))
+    assert_select(".next_page a[href=?]", users_path(page: 3, page_size: 1))
+    assert_select(".previous_page a[href=?]", users_path(page: 1, page_size: 1))
 
-    # Should have 1 user, no link to the next page, and a link to the prev page.
-    assert_select(".users a[href=?]", user_path(@user1), count: 0)
-    assert_select(".users a[href=?]", user_path(@user2))
-    assert_select("a[href=?]", users_path(page: 3, page_size: 1), count: 0)
-    assert_select("a[href=?]", users_path(page: 1, page_size: 1))
+    # Page 3
+    # Should have the 3rd user, no link to the next page, and a link to the prev page.
+    get(users_path(page: 3, page_size: 1))
+    assert_select(".user-index-entry a[href=?]", user_path(@users[2]))
+    assert_select(".next_page a[href=?]", '#')
+    assert_select(".previous_page a[href=?]", users_path(page: 2, page_size: 1))
+
   end
 
   test "page size too big redirects" do

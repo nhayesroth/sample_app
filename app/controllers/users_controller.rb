@@ -20,7 +20,9 @@ class UsersController < ApplicationController
       flash[:danger] = BAD_PAGE_SIZE_WARNING
       redirect_to users_path(params.permit(:page, :page_size)) and return
     end
-    @users = User.paginate(page: params[:page], per_page: params[:page_size])
+    @users =
+      User.paginate(page: params[:page], per_page: params[:page_size])
+          .order('id')
   end
 
   # Action that shows a user profile
