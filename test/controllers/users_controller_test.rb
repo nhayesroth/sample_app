@@ -5,6 +5,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user1 = users(:user1)
     @user2 = users(:user2)
+    @admin = users(:admin)
   end
 
   ################ Basic route tests ################
@@ -36,6 +37,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_select("title", full_title("Account Settings"))
   end
 
+  test "get account settings when admin" do
+    login(email: @admin.email, password: 'password')
+    get edit_user_path(@user1)
+    assert_response :success
+    assert_select("title", full_title("Account Settings"))
+  end
+
   test "get index when logged in" do
     login
     get(users_path)
@@ -56,5 +64,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response(:redirect)
     assert_redirected_to login_path
   end
+
+
+
+  test "should not allow the admin attribute to be edited via the web" do
+    login(email: @user2.email, password: 'password2')
+    assert_not(@user2.admin?)
+    patch(
+      user_path(@user2),
+      params: {
+        user: {
+          admin: true
+        }
+      })
+    assert_not(@user2.reload.admin?)
+  end
+
 
 end

@@ -5,3 +5,4 @@
             form_url: "/users/#{@user.id}/edit",
             form_submit_text: 'Save account changes',
             include_gravatar_edit: true } %>
+<%= link_to "Delete account", @user, method: :delete, data: { confirm: "You sure?" } %>

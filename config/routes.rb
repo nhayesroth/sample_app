@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   post '/signup',  to: 'users#create'
   get '/users/:id/edit',  to: 'users#edit'
   patch '/users/:id/edit',  to: 'users#update'
+  delete '/users/:id/edit',  to: 'users#destroy'
   resources       :users
 
   # Sessions

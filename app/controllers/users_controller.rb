@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
-  before_action :check_logged_in, only: [:index, :edit, :update]
-  before_action :check_authorized, only: [:edit, :update]
+  before_action :check_logged_in, only: [:index, :edit, :update, :destroy]
+  before_action :check_authorized, only: [:edit, :update, :destroy]
+  
   DEFAULT_PAGE_SIZE = 25
   MAX_PAGE_SIZE = 100
+
   SIGNUP_SUCCESS = "Successfully signed up! Welcome!"
+  DESTROY_SUCCESS = "Successfully deleted account!"
   UPDATE_SUCCESS = "Account settings updated!"
   NOT_AUTHORIZED = "You are not authorized to view other users' pages."
   BAD_PAGE_SIZE_WARNING = "Page size must be between [1, #{MAX_PAGE_SIZE}]."
@@ -57,6 +60,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    User.find(params[:id]).destroy
+    @current_user = helpers.current_user
+    if !@current_user.nil? && @current_user.admin
+      redirect_to users_path
+    else
+      redirect_to root_path
+    end
+    flash.now[:success] = DESTROY_SUCCESS
+  end
+
   private def check_logged_in
     if !helpers.logged_in?
       flash[:danger] = "Please log in."
@@ -67,7 +81,8 @@ class UsersController < ApplicationController
 
   private def check_authorized
     # Check if the logged in user (via cookies/session) matches the requested url.
-    if (helpers.current_user.id.to_s != params[:id])
+    if (!helpers.current_user.admin? &&
+        helpers.current_user.id.to_s != params[:id])
       redirect_to(root_path)
       flash[:danger] = 'You are not authorized to view other users\' pages.'
     end
